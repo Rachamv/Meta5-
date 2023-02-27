@@ -26,7 +26,7 @@ public:
    virtual bool      Save(const int file_handle)                         { return(true);   }
    virtual bool      Load(const int file_handle)                         { return(true);   }
    //--- method of identifying the object
-   virtual int       Type(void)                                    const { return(0);      }
+   virtual inRachamv/Meta5-/game/Expertt       Type(void)                                    const { return(0);      }
    //--- method of comparing the objects
    virtual int       Compare(const CObject *node,const int mode=0) const { return(0);      }
   };
