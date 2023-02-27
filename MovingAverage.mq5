@@ -9,6 +9,11 @@
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
+#include <Trade/Trade.mq>
+
+input double Lots = 0.1;
+input int TpPoints = 100;
+input int SlPoints = 100;
 
 input int Ma1Period = 20;
 input ENUM_MA_METHOD Ma1Method = MODE_EMA;
@@ -21,6 +26,8 @@ int handleMa1;
 int handleMa2;
 
 int barsTotal;
+
+CTrade trade;
 
 int OnInit(){
    handleMa1 = iMA(_Symbol,PERIOD_CURRENT,Ma1Period,0,Ma1Method,PRICE_CLOSE);
@@ -42,8 +49,31 @@ void OnTick(){
    
       if(ma1[1] > mal2[1] && ma1[0] < mal2[0]){
          printf(__FUNCTION__," >  buy crossover.....");
+         
+         double entry = SymbolInfcDouble(_Symbol,SYMBOL_ASK);
+         entry = NormalizeDouble(entry,_Digits);
+
+         double tp = entry + TpPoints * _Point;
+         tp = NormalizeDouble(tp,_Digits);
+
+         double sl = entry - SlPoints * _Point;
+         sl = NormalizeDouble(sl,_Digits);
+
+         trade.Buy(Lots,_Symbol, entry,sl,tp);
+
       }if(ma1[1] < mal2[1] && ma1[0] > mal2[0]){
          printf(__FUNCTION__," >  sell crossover.....");
+
+         double entry = SymbolInfcDouble(_Symbol,SYMBOL_BID);
+         entry = NormalizeDouble(entry,_Digits);
+
+         double tp = entry - TpPoints * _Point;
+         tp = NormalizeDouble(tp,_Digits);
+
+         double sl = entry + SlPoints * _Point;
+         sl = NormalizeDouble(sl,_Digits);
+
+         trade.Sell(Lots,_Symbol, entry,sl,tp);
       }
    }
      
